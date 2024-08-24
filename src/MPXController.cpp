@@ -1,5 +1,11 @@
 #include "MPXController.h"
 
+#if defined(ESP8266) || defined(ESP32)
+    #define RECEIVE_ATTR IRAM_ATTR
+#else
+    #define RECEIVE_ATTR
+#endif
+
 #define debuggerPort    Serial
 #define debug(...)      if (this->_debug) debuggerPort.print(String(millis()) + " | " + __VA_ARGS__)
 #define debugln(...)    if (this->_debug) debuggerPort.println(String(millis()) + " | " + __VA_ARGS__)
@@ -164,7 +170,7 @@ void MPXController::_disableTransmit() {
   interrupts();
 }
 
-void IRAM_ATTR MPXController::_interruptHandler() {
+void RECEIVE_ATTR MPXController::_interruptHandler() {
   if (!_mpxInstance) return;
   unsigned long currentMicros = micros();
   unsigned long length = currentMicros - _mpxInstance->_previousMicros;
