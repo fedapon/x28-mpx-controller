@@ -1,4 +1,4 @@
-# Librería para conectarnos a una central de alarma X-28
+# Conexión a bus MPX/MPXH de Alarma X28
 
 Este proyecto permite conectarnos una alarma X-28 con protocolo MPX o MPHX .
 
@@ -20,7 +20,7 @@ Esta es una versión inicial y tiene una funcionalidad minima. Algunas ideas pen
 
 ## Hardware requerido
 
-Actualmente el hardware utilizado para el desarrollo es un ESP8266.
+Actualmente el hardware utilizado para el desarrollo es un ESP8266 pero estimo que debería funcionar con ESP32 o cualquier arduino que permita utilizar interrupción en el pin de entrada de datos.
 Para conectar a la alarma se necesita basicamente un level shifter y un driver. Este circuito fue probado con alarmas con bus MPX (12V) y MPXH (8V aproximadamente).
 
 ![Alt text](circuito.png?raw=true "Circuito")
