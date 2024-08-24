@@ -1,6 +1,6 @@
 {
     "name": "x28-mpx-controller",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Connect to MPX bus in your X28 alarm",
     "keywords": "alarm, x28, mpx, mphx",
     "authors": {
