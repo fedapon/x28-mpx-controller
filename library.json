@@ -1,15 +1,20 @@
 {
     "name": "x28-mpx-controller",
+    "version": "1.0.0",
     "description": "Connect to MPX bus in your X28 alarm",
     "keywords": "alarm, x28, mpx, mphx",
     "authors": {
-        "name": "Fernando Pons"
+        "name": "Fernando Pons",
+        "url": "https://github.com/fedapon",
+        "maintainer": true
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/fedapon/x28-mpx-controller"
+        "url": "https://github.com/fedapon/x28-mpx-controller.git"
     },
-    "version": "1.0.0",
+    "license": "",
+    "homepage": "https://github.com/fedapon/x28-mpx-controller",
+    "dependencies": {},
     "frameworks": [
         "arduino"
     ],
