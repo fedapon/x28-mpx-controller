@@ -21,12 +21,14 @@ Esta es una versión inicial y tiene una funcionalidad minima. Algunas ideas pen
 ## Hardware requerido
 
 Actualmente el hardware utilizado para el desarrollo es un ESP8266 pero estimo que debería funcionar con ESP32 o cualquier arduino que permita utilizar interrupción en el pin de entrada de datos.
-Para conectar a la alarma se necesita basicamente un level shifter y un driver. Este circuito fue probado con alarmas con bus MPX (12V) y MPXH (8V aproximadamente).
+Para conectar a la alarma se necesita basicamente un level shifter y un driver. Este circuito fue probado con los modelos:
+ - 9004W-MPX (bus MPX de 12V).
+ - N4-MPXH (bus MPXH 8V aprox).
 
 ![Alt text](circuito.png?raw=true "Circuito")
 
 ## Agradecimiento
 
-Este proyecto no habría sido posible sin las ayuda de estos proyectos:
+Este proyecto no habría sido posible sin la ayuda de estos proyectos:
  - https://github.com/gbisheimer/x28_sniffer
  - https://github.com/hjf/esphome-x28
