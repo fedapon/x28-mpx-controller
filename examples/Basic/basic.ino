@@ -20,8 +20,6 @@ void setup()
                 debugln(F("MPX -> MPX_EVENT_ALARM_ARMED")); break;
             case MPX_EVENT_ALARM_DISARMED:
                 debugln(F("MPX -> MPX_EVENT_ALARM_DISARMED")); break;
-            case MPX_EVENT_ALARM_RINGING:
-                debugln(F("MPX -> MPX_EVENT_ALARM_RINGING")); break;
             case MPX_EVENT_ESTOY:
                 debugln(F("MPX -> MPX_EVENT_ESTOY")); break;
             case MPX_EVENT_ME_VOY:
