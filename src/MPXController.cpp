@@ -16,7 +16,6 @@ const uint16_t KEYBOARD_CODES[] = {
 enum MPXCODE {
   MPX_CODE_ALARM_ARMED = 0x49C1,
   MPX_CODE_ALARM_DISARMED = 0xC92B,
-  MPX_CODE_ALARM_RINGING = 0x490E,
   MPX_CODE_ESTOY = 0x4BE8,
   MPX_CODE_ME_VOY = 0xCBAE
 };
@@ -66,10 +65,6 @@ void MPXController::loop(unsigned long timeout) {
       case MPX_CODE_ALARM_DISARMED:
         if (this->_newEventCallback != NULL)
           this->_newEventCallback(MPX_EVENT_ALARM_DISARMED);
-        break;
-      case MPX_CODE_ALARM_RINGING:
-        if (this->_newEventCallback != NULL)
-          this->_newEventCallback(MPX_EVENT_ALARM_RINGING);
         break;
       case MPX_CODE_ESTOY:
         if (this->_newEventCallback != NULL)
