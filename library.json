@@ -12,7 +12,6 @@
         "type": "git",
         "url": "https://github.com/fedapon/x28-mpx-controller.git"
     },
-    "license": "",
     "homepage": "https://github.com/fedapon/x28-mpx-controller",
     "dependencies": {},
     "frameworks": [
