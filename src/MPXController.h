@@ -34,6 +34,10 @@ enum MPXEvent {
   MPX_EVENT_ALARM_DISARMED,
   MPX_EVENT_ESTOY,
   MPX_EVENT_ME_VOY,
+  MPX_EVENT_SENSORS_Z1,
+  MPX_EVENT_SENSORS_Z2,
+  MPX_EVENT_SENSORS_Z3,
+  MPX_EVENT_SENSORS_Z4,
 };
 
 class Buffer {
@@ -120,12 +124,14 @@ private:
   Buffer* _buffer;
 
   void (*_newEventCallback)(MPXEvent) = NULL;
+  void (*_loggerCallback)(String log) = NULL;
 
   static void _interruptHandler();
   bool _isKeyboardCode(uint16_t code);
   void _enableTransmit();
   void _disableTransmit();
   void _debugPacket(uint16_t data, bool out = false);
+  void debugln(String log);
 
 public:
   MPXController(bool debug = false);
@@ -135,6 +141,7 @@ public:
   void sendKey(MPXKey key);
   void sendKeys(String code);
   void setNewEventCallback(void (*callback)(MPXEvent event));
+  void setLoggerCallback(void (*callback)(String log));
 };
 
 #endif // MPXController_H

@@ -1,14 +1,12 @@
 #include "MPXController.h"
 
 #if defined(ESP8266) || defined(ESP32)
-    #define RECEIVE_ATTR IRAM_ATTR
+#define RECEIVE_ATTR IRAM_ATTR
 #else
-    #define RECEIVE_ATTR
+#define RECEIVE_ATTR
 #endif
 
 #define debuggerPort    Serial
-#define debug(...)      if (this->_debug) debuggerPort.print(String(millis()) + " | " + __VA_ARGS__)
-#define debugln(...)    if (this->_debug) debuggerPort.println(String(millis()) + " | " + __VA_ARGS__)
 
 static MPXController* _mpxInstance;
 
@@ -23,11 +21,29 @@ enum MPXCODE {
   MPX_CODE_ALARM_ARMED = 0x49C1,
   MPX_CODE_ALARM_DISARMED = 0xC92B,
   MPX_CODE_ESTOY = 0x4BE8,
-  MPX_CODE_ME_VOY = 0xCBAE
+  MPX_CODE_ME_VOY = 0xCBAE,
+  MPX_CODE_Z1_MPXH = 0x1615,
+  MPX_CODE_Z2_MPXH = 0x1623,
+  MPX_CODE_Z3_MPXH = 0x9630,
+  MPX_CODE_Z4_MPXH = 0x1640,
+  MPX_CODE_Z1_WIRED = 0xB08A,
+  MPX_CODE_Z2_WIRED = 0xB045,
+  MPX_CODE_Z3_WIRED = 0xB026,
+  MPX_CODE_Z4_WIRED = 0xB010
 };
 
 MPXController::MPXController(bool debug) {
   this->_debug = debug;
+}
+
+void MPXController::debugln(String log) {
+  if (this->_debug) {
+    String msg = String(millis()) + " | MPX -> " + log;
+    if (this->_loggerCallback != NULL)
+      this->_loggerCallback(msg);
+    else
+      debuggerPort.println(msg);
+  }
 }
 
 void MPXController::begin(uint8_t txPin, uint8_t rxPin, bool invertTxPin, bool invertRxPin) {
@@ -45,13 +61,17 @@ void MPXController::begin(uint8_t txPin, uint8_t rxPin, bool invertTxPin, bool i
   }
   pinMode(this->_rxPin.pin, INPUT);
   attachInterrupt(digitalPinToInterrupt(this->_rxPin.pin), this->_interruptHandler, CHANGE);
-  debugln(F("MPX -> begin()"));
-  debugln("MPX -> txPin: " + String(this->_txPin.pin) + " | txPin.high: " + String(this->_txPin.high) + " | txPin.low: " + String(this->_txPin.low));
-  debugln("MPX -> rxPin: " + String(this->_rxPin.pin) + " | rxPin.high: " + String(this->_rxPin.high) + " | rxPin.low: " + String(this->_rxPin.low));
+  debugln(F("begin()"));
+  debugln("txPin: " + String(this->_txPin.pin) + " | txPin.high: " + String(this->_txPin.high) + " | txPin.low: " + String(this->_txPin.low));
+  debugln("rxPin: " + String(this->_rxPin.pin) + " | rxPin.high: " + String(this->_rxPin.high) + " | rxPin.low: " + String(this->_rxPin.low));
 }
 
 void MPXController::setNewEventCallback(void (*callback)(MPXEvent event)) {
   this->_newEventCallback = callback;
+}
+
+void MPXController::setLoggerCallback(void (*callback)(String log)) {
+  this->_loggerCallback = callback;
 }
 
 void MPXController::loop(unsigned long timeout) {
@@ -79,6 +99,26 @@ void MPXController::loop(unsigned long timeout) {
       case MPX_CODE_ME_VOY:
         if (this->_newEventCallback != NULL)
           this->_newEventCallback(MPX_EVENT_ME_VOY);
+        break;
+      case MPX_CODE_Z1_MPXH:
+      case MPX_CODE_Z1_WIRED:
+        if (this->_newEventCallback != NULL)
+          this->_newEventCallback(MPX_EVENT_SENSORS_Z1);
+        break;
+      case MPX_CODE_Z2_MPXH:
+      case MPX_CODE_Z2_WIRED:
+        if (this->_newEventCallback != NULL)
+          this->_newEventCallback(MPX_EVENT_SENSORS_Z2);
+        break;
+      case MPX_CODE_Z3_MPXH:
+      case MPX_CODE_Z3_WIRED:
+        if (this->_newEventCallback != NULL)
+          this->_newEventCallback(MPX_EVENT_SENSORS_Z3);
+        break;
+      case MPX_CODE_Z4_MPXH:
+      case MPX_CODE_Z4_WIRED:
+        if (this->_newEventCallback != NULL)
+          this->_newEventCallback(MPX_EVENT_SENSORS_Z4);
         break;
       }
     }
@@ -146,7 +186,7 @@ void MPXController::sendKey(MPXKey key) {
 }
 
 void MPXController::sendKeys(String keys) {
-  debugln(F("MPX -> Sending keys: ") + keys);
+  debugln(F("Sending keys: ") + keys);
   for (unsigned int i = 0; i < keys.length(); i++) {
     const int key = keys.charAt(i) - '0';
     this->sendKey((MPXKey)key);
@@ -240,7 +280,7 @@ void MPXController::_debugPacket(uint16_t data, bool out) {
   MPXPacket packet(data);
   String direction = out ? ">>" : "<<";
   String isKeyboard = this->_isKeyboardCode(packet.getWord()) ? "1" : "0";
-  debugln("MPX -> Packet | " + direction + " | isKB: " + isKeyboard
+  debugln("Packet | " + direction + " | isKB: " + isKeyboard
     + " | word: " + String(packet.getWord(), BIN) + "b (0x" + String(packet.getWord(), HEX) + ")"
     + " | parity: " + String(packet.getParity())
     + " | id: " + String(packet.getId())
